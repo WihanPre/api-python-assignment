@@ -27,7 +27,7 @@ def get_db(request: Request):
 # health checker
 @app.get("/health")
 async def root():
-    return {"message": "I am healthy"}
+    return {"message": "I am healthy, let's go!!!!!!!"}
 
 # Basic crud operations
 # @app.post("/appointment/", response_model=schemas.Brewer)

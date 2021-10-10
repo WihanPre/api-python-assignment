@@ -1,14 +1,12 @@
-from typing import List
-
 from fastapi import Depends, FastAPI, HTTPException, Request, Response
-from redis import Redis
+from typing import List
 from sqlalchemy.orm import Session
-
 from app.api import crud, models, schemas
 from app.database import SessionLocal, engine
+from redis import Redis
 
 # Uncomment the line below to let the ORM generate tables and relationships for us - if not using migrations
-models.Base.metadata.create_all(bind=engine)
+# models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -29,37 +27,15 @@ def get_db(request: Request):
 # health checker
 @app.get("/health")
 async def root():
-    return {"message": "I am healthy, now what"}
+    return {"message": "I am healthy"}
 
 # Basic crud operations
-@app.post("/appointment/{patient_id}/patient/", response_model=schemas.Appointment)
-async def create_appointment(id: int, patient_id: int, appointment: schemas.AppointmentCreate, db: Session = Depends(get_db)):
-    return crud.create_patient_appointment(db=db, appointment=appointment, id=id, patient_id=patient_id)
+# @app.post("/appointment/", response_model=schemas.Brewer)
 
-@app.post("/patient/", response_model=schemas.Patient)
-async def create_patient(patient: schemas.PatientCreate, db: Session = Depends(get_db)):
-    db_patient = crud.get_patient_by_name(db, name=patient.name)
-    if db_patient:
-        raise HTTPException (status_code=400, detail="Patient already registered")  #lookup raise
-    return crud.create_patient(db=db, patient=patient)
+# @app.get("/appointments", response_model=List[schemas.Brewer])
 
-@app.get("/appointments/", response_model=List[schemas.Appointment])
-async def get_appointments(skip: int = 0, limit: int = 200, db: Session = Depends(get_db)):
-    appointments = crud.get_appointments(db=db, skip=skip, limit=limit)
-    return appointments
+# @app.get("/appointment/{id}", response_model=schemas.Recipe)
 
-@app.get("/appointment/{id}", response_model=schemas.Appointment)
-async def get_appointmet_id(id: int, db: Session = Depends(get_db)):
-    appointment = crud.get_appointment_by_id(db, id=id)
-    if appointment is None:
-        raise HTTPException (status_code=404, detail="Appointment does not exist")  #lookup raise
-    return appointment
-
-@app.delete("/appointment/{id}", status_code=200)
-async def delete_appointement_by_id(id: int, db: Session = Depends(get_db)):
-    db_appointment = crud.get_appointment_by_id(db, id)
-    if db_appointment is None:
-        raise HTTPException (status_code=404, detail="Appointment does not exist")  #lookup raise
-    return crud.delete_patient_appointment(db, id)
+# @app.delete("/appointment/{id}", status_code=200)
 
 # @app.put("/appointment/{id}", response_model=schemas.Brewer)

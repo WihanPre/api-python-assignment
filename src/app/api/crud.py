@@ -9,7 +9,7 @@ def get_patient(db: Session, patient_id: int):
 def get_patient_by_name(db: Session, name: str):
     return db.query(models.Patient).filter(models.Patient.name == name).first()
 
-def get_patient_by_id(db: Session, id: id):
+def get_patient_by_id(db: Session, patient_id: id):
     return db.query(models.Patient).filter(models.Patient.id == id).first()
 
 def get_patients(db: Session, skip: int = 0, limit: int = 100):
@@ -29,7 +29,7 @@ def delete_patient(db: Session, id: int):
 def get_appointments(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Appointment).offset(skip).limit(limit).all()
 
-def create_patient_appointment(db: Session, appointment: schemas.AppointmentCreate, id: int, patient_id: int): ##Must be wrong
+def create_patient_appointment(db: Session, appointment: schemas.AppointmentCreate, id: int, patient_id: int):
     db_appointment = models.Appointment(id=id, patient_id=patient_id)  ##Must be wrong
     db.add(db_appointment)
     db.commit()

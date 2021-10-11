@@ -22,6 +22,8 @@ class Appointment(AppointmentBase):
 
 class PatientBase(BaseModel):
     name: str
+    id: int
+    contact_number: str
 
 class PatientCreate(PatientBase):
     pass

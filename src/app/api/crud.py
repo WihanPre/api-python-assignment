@@ -21,7 +21,10 @@ def create_patient(db: Session, patient: schemas.PatientCreate):
     return db_patient
 
 def delete_patient(db: Session, id: int):
-    return db.query(models.Patient).delete(models.Patient.id == id)
+    db_patient = db.query(models.Patient).delete(models.Patient.id == id)
+    db.delete(db_patient)
+    db.commit()
+    return {"message": "Patient has been deleter"}
 
 def get_appointments(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Appointment).offset(skip).limit(limit).all()
@@ -33,7 +36,7 @@ def create_patient_appointment(db: Session, appointment: schemas.AppointmentCrea
     db.refresh(db_appointment)
     return db_appointment
 
-def get_appointment_by_id(db: Session, appointment_id: int):
+def get_appointment_by_id(db: Session, id: int):
     return db.query(models.Appointment).filter(models.Appointment.id == id)
 
 

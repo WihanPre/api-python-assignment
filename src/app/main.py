@@ -35,7 +35,7 @@ async def create_appointment(patient_id: int, appointment: schemas.AppointmentCr
     return crud.create_patient_appointment(db=db, appointment=appointment, patient_id=patient_id)
 
 @app.post("/patients", response_model=schemas.Patient)
-def create_patient(patient: schemas.PatientCreate, db: Session = Depends(get_db)):
+async def create_patient(patient: schemas.PatientCreate, db: Session = Depends(get_db)):
     db_patient = crud.get_patient_by_name(db, name=patient.name)
     if db_patient:
         raise HTTPException (status_code=400, detail="Patient already registered")  #lookup raise, as expected Excep Handling
